@@ -1,0 +1,15 @@
+services:
+  mssqldb:
+    container_name: system.mssql.db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${EXTERNAL_INTEGRATION_MSSQL_PASSWORD}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - authentication-sql-data:/var/opt/mssql
+
+volumes:
+  authentication-sql-data:
