@@ -1,3 +1,5 @@
+using Authentication.API.Registers;
+
 namespace Dotnet.Authentication.API
 {
     public class Program
@@ -18,11 +20,17 @@ namespace Dotnet.Authentication.API
 
         private static WebApplication BuildApplication(WebApplicationBuilder builder)
         {
+            builder.Services.AddControllers();
+            builder.Services
+            .AddDatabaseRegister(builder.Configuration)
+            .RegisterSwagger(builder.Configuration);
+
             return builder.Build();
         }
 
         private static void RunApplication(WebApplication app)
         {
+            app.UseSwaggerDocumentation(app.Configuration);
             app.Run();
         }
     }
