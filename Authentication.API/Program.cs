@@ -1,4 +1,4 @@
-namespace Dotnet.WebApi
+namespace Dotnet.Authentication.API
 {
     public class Program
     {
