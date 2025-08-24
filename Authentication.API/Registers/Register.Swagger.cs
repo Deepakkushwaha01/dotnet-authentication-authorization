@@ -16,7 +16,7 @@ public static partial class Register
                 Description = config["Swagger:Description"],
             });
 
-            // JWT Bearer in Swagger UI
+            // ✅ JWT Bearer definition
             var securityScheme = new OpenApiSecurityScheme
             {
                 Name = "Authorization",
@@ -26,12 +26,26 @@ public static partial class Register
                 In = ParameterLocation.Header,
                 Description = "Enter 'Bearer {token}'"
             };
+
             o.AddSecurityDefinition("Bearer", securityScheme);
+
+            // ✅ Security Requirement: Link the definition to all endpoints with [Authorize]
             o.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-                { securityScheme, new List<string>() }
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"  // Must match AddSecurityDefinition name
+                        }
+                    },
+                    new string[] {} // Roles can be empty for all authorized endpoints
+                }
             });
         });
+
         return services;
     }
 

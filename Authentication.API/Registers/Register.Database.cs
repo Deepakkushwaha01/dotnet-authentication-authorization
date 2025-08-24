@@ -20,6 +20,18 @@ namespace Authentication.API.Registers
                             errorNumbersToAdd: null);
                 });
             });
+
+            services.AddScoped<AuthDbContext>().AddDbContext<AuthDbContext>(options =>
+            {
+                options.UseSqlServer(connectionStringSettings.IntegrationDbConnectionString,
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                            sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 5,
+                            maxRetryDelay: TimeSpan.FromSeconds(15),
+                            errorNumbersToAdd: null);
+                });
+            });
             return services;
         }
     }

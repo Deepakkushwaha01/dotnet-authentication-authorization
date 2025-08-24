@@ -1,4 +1,5 @@
 using Authentication.API.Registers;
+using Authentication.API.Infrastructure.Settings;
 
 namespace Dotnet.Authentication.API
 {
@@ -23,7 +24,12 @@ namespace Dotnet.Authentication.API
             builder.Services.AddControllers();
             builder.Services
             .AddDatabaseRegister(builder.Configuration)
-            .RegisterSwagger(builder.Configuration);
+            .RegisterSwagger(builder.Configuration)
+            .AddIdentityWithJwt(builder.Configuration)
+            .RegisterVersioning();
+
+            builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt"));
 
             return builder.Build();
         }
@@ -31,6 +37,11 @@ namespace Dotnet.Authentication.API
         private static void RunApplication(WebApplication app)
         {
             app.UseSwaggerDocumentation(app.Configuration);
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
             app.Run();
         }
     }
